@@ -1,12 +1,14 @@
 from flask import Flask
 from flask_smorest import Api
-from resources.item import blp as ItemBluePrint
-from resources.store import blp as StoreBluePrint
+from resources import ItemBluePrint
+from resources  import StoreBluePrint
+from resources import  TagBluePrint
 from db import db
 import models
 import os
 
 def create_app(db_url=None):
+    
     app = Flask(__name__)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
@@ -40,6 +42,7 @@ def create_app(db_url=None):
 
     api.register_blueprint(ItemBluePrint)
     api.register_blueprint(StoreBluePrint)
+    api.register_blueprint(TagBluePrint)
 
 
     return app
