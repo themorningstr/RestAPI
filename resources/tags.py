@@ -63,7 +63,7 @@ class Tag(MethodView):
             return {"message": "Tag deleted."}
         abort(
             400, 
-            message = "An Error Occured."
+            message = "Could not delete tag. Make sure tag is not associated with any items, then try again.",
         )
 
 
