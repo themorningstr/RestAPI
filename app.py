@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_smorest import Api
 from resources import (
     ItemBluePrint, 
@@ -6,9 +6,8 @@ from resources import (
     TagBluePrint, 
     UserBluePrint,
     )
-
-import jsonify
 from blocklist import BLOCKLIST
+from flask_migrate import Migrate
 
 from db import db
 import models
@@ -22,7 +21,7 @@ def create_app(db_url=None):
     app = Flask(__name__)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
-    app.config["API_TITLE"] = "Stores REST API"
+    app.config["API_TITLE"] = "Stores REST API"  
     app.config["API_VERSION"] = "v1"
     app.config["OPENAPI_VERSION"] = "3.0.3"
     app.config["OPENAPI_URL_PREFIX"] = "/"
@@ -34,6 +33,7 @@ def create_app(db_url=None):
 
     db.init_app(app)
 
+    migrate = Migrate(app, db)
 
     api = Api(app)
 
@@ -92,11 +92,6 @@ def create_app(db_url=None):
             ),
             401,
         )
-
-    with app.app_context():
-        import models  # noqa: F401
-
-        db.create_all()
     
 
     api.register_blueprint(ItemBluePrint)
